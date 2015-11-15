@@ -44,38 +44,37 @@ describe(@"BinaryUpdater", ^{
                                                              error:nil];
             [[contents should] equal:@"12345AAA90"];
         });
-    });
-    
-    context(@"exception", ^{
-        let(invalidHandle, ^id{
-            return [[NSFileHandle alloc] initWithFileDescriptor:STDERR_FILENO + 1];
-        });
         
-        beforeEach(^{
-            [[NSFileHandle should] receive:@selector(fileHandleForUpdatingURL:error:)
-                                 andReturn:invalidHandle];
-            [[invalidHandle should] receive:@selector(closeFile)];
-            debuggerContinueOnExceptions = YES;
-        });
-        
-        afterEach(^{
-            debuggerContinueOnExceptions = NO;
-        });
-        
-        it(@"should be reported as error", ^{
-            NSError *error = nil;
-            BOOL success = [binaryUpdater updateFileAtURL:fileUrl error:&error];
-            [[theValue(success) should] beNo];
-            [[error should] beNonNil];
-            [[error.domain should] equal:@"BinaryUpdaterErrorDomain"];
-            [[theValue(error.code) should] equal:theValue(1)];
+        context(@"exception", ^{
+            let(invalidHandle, ^id{
+                return [[NSFileHandle alloc] initWithFileDescriptor:STDERR_FILENO + 1];
+            });
             
-            NSException *illegalSeek = error.userInfo[@"exception"];
-            [[illegalSeek.name should] equal:NSFileHandleOperationException];
-            [[illegalSeek.reason should] equal:@"*** -[NSConcreteFileHandle seekToFileOffset:]: Illegal seek"];
+            beforeEach(^{
+                [[NSFileHandle should] receive:@selector(fileHandleForUpdatingURL:error:)
+                                     andReturn:invalidHandle];
+                [[invalidHandle should] receive:@selector(closeFile)];
+                debuggerContinueOnExceptions = YES;
+            });
+            
+            afterEach(^{
+                debuggerContinueOnExceptions = NO;
+            });
+            
+            it(@"should be reported as error", ^{
+                NSError *error = nil;
+                BOOL success = [binaryUpdater updateFileAtURL:fileUrl error:&error];
+                [[theValue(success) should] beNo];
+                [[error should] beNonNil];
+                [[error.domain should] equal:@"BinaryUpdaterErrorDomain"];
+                [[theValue(error.code) should] equal:theValue(1)];
+                
+                NSException *illegalSeek = error.userInfo[@"exception"];
+                [[illegalSeek.name should] equal:NSFileHandleOperationException];
+                [[illegalSeek.reason should] equal:@"*** -[NSConcreteFileHandle seekToFileOffset:]: Illegal seek"];
+            });
         });
     });
-
 });
 
 SPEC_END
