@@ -10,20 +10,14 @@
 
 @implementation BinaryUpdater
 
-const long long kDataOffset = 5;
-
-- (NSData *)dataToWrite {
-    return [NSData dataWithBytes:"12345" length:5];
-}
-
 - (BOOL)updateFileAtURL:(NSURL *)fileUrl error:(NSError **)error {
     NSFileHandle *file = [NSFileHandle fileHandleForUpdatingURL:fileUrl error:error];
     if (!file) {
         return NO;
     }
     @try {
-        [file seekToFileOffset:kDataOffset];
-        [file writeData:[self dataToWrite]];
+        [file seekToFileOffset:self.atOffset];
+        [file writeData:self.dataToWrite];
     } @catch (NSException *exception) {
         if (error) {
             *error = [NSError errorWithDomain:@"BinaryUpdaterErrorDomain"
