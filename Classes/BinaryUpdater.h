@@ -6,8 +6,8 @@
 //  Copyright © 2015 Paul Zabelin. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
-@interface SmartExceptionBreakpoint : NSObject
-
+@interface BinaryUpdater : NSObject
+- (BOOL)updateFileAtURL:(NSURL *)fileUrl error:(NSError **)error;
 @end
