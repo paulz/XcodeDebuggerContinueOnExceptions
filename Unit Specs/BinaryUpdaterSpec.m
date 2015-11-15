@@ -28,8 +28,22 @@ describe(@"BinaryUpdater", ^{
             return updater;
         });
         
+        let(fileUrl, ^id{
+            NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+            return [testBundle URLForResource:@"Sample File" withExtension:@"txt"];
+        });
+        
         it(@"should update file url", ^{
             [[binaryUpdater should] beNonNil];
+            NSError *error = nil;
+            BOOL success = [binaryUpdater updateFileAtURL:fileUrl error:&error];
+            [[theValue(success) should] beYes];
+            [[error should] beNil];
+            
+            NSString *contents = [NSString stringWithContentsOfURL:fileUrl
+                                                      usedEncoding:nil
+                                                             error:nil];
+            [[contents should] equal:@"12345AAA90"];
         });
     });
 
