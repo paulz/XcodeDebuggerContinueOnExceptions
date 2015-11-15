@@ -21,7 +21,7 @@
     } @catch (NSException *exception) {
         if (error) {
             *error = [NSError errorWithDomain:@"BinaryUpdaterErrorDomain"
-                                         code:-1
+                                         code:1
                                      userInfo:@{@"exception" : exception}];
         }
         return NO;
