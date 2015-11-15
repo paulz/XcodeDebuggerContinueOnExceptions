@@ -6,7 +6,7 @@
 //  Copyright 2015 Paul Zabelin. All rights reserved.
 //
 
-#import <Kiwi/Kiwi.h>
+#import "SpecHelper.h"
 #import "BinaryUpdater.h"
 
 SPEC_BEGIN(BinaryUpdaterSpec)
@@ -55,8 +55,12 @@ describe(@"BinaryUpdater", ^{
             [[NSFileHandle should] receive:@selector(fileHandleForUpdatingURL:error:)
                                  andReturn:invalidHandle];
             [[invalidHandle should] receive:@selector(closeFile)];
+            debuggerContinueOnExceptions = YES;
         });
         
+        afterEach(^{
+            debuggerContinueOnExceptions = NO;
+        });
         
         it(@"should be reported as error", ^{
             NSError *error = nil;
