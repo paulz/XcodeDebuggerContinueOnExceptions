@@ -6,8 +6,8 @@
  * ```script lldb.process.Continue() if lldb.frame.EvaluateExpression("debuggerContinueOnExceptions").GetValueAsUnsigned() else None```
 2. Set global variable
  * ```BOOL debuggerContinueOnExceptions = NO;```
-3. Change it's value to YES before executing a block where exception is expected
-4. And change it back to NO after the same block.
+3. Change ```debuggerContinueOnExceptions = YES;``` before executing a block where exception is expected
+4. And change it back after that block ```debuggerContinueOnExceptions = NO;```.
 
 Read more details on blog: http://paulz.github.io/ios/tdd/unit/objc/2015/11/14/testing-code-that-catches-exceptions.html
 
